@@ -1,0 +1,47 @@
+[
+    {
+        "name": "Fido",
+        "type": "dog",
+        "description": "Mixed Breed, Young, Male, Large Yellow / Tan / Blond / Black",
+        "available": true,
+        "skill1": "roll over",
+        "skill2": "play dead",
+        "skill3": "fetch"
+    },
+    {
+        "name": "Spot",
+        "type": "dog",
+        "description": "Terrier, Old, Male, Small Black / White",
+        "available": false,
+        "skill1": "bark",
+        "skill2": "dig",
+        "skill3": "chew shoes"
+    },
+    {
+        "name": "Fluffy",
+        "type": "cat",
+        "description": "Manx, Young, Female, Large Orange / White",
+        "available": false,
+        "skill1": "meow",
+        "skill2": "purr",
+        "skill3": "sleep"
+    },
+    {
+        "name": "Patches",
+        "type": "cat",
+        "description": "Calico, Young, Male, Medium Orange / White / Black",
+        "available": true,
+        "skill1": "runs",
+        "skill2": "hides under bed",
+        "skill3": "unknown"
+    },
+    {
+        "name": "Medusa",
+        "type": "snake",
+        "description": "Ball Python, Ancient, Female, Medium Yellow / Brown / Black",
+        "available": true,
+        "skill1": "hisses",
+        "skill2": "eats mice",
+        "skill3": "sleeps"
+    }
+]
