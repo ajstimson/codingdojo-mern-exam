@@ -24,7 +24,7 @@ const Context = ({ children }) => {
 			})
 	}, [id, setPets])
 
-	const ENDPOINT = "http://localhost:8000/"
+	const ENDPOINT = "http://localhost:8000"
 	const { current: socket } = useRef(io(ENDPOINT))
 	useEffect(() => {
 		socket.onAny((res) => {
@@ -40,10 +40,6 @@ const Context = ({ children }) => {
 		})
 	}, [socket, setPets])
 
-	// useEffect(() => {
-	// 	console.log(id)
-	// 	id && pets && setLikes(pets[0].likes)
-	// }, [id, pets, likes, setLikes])
 	return (
 		<PetContext.Provider
 			value={{

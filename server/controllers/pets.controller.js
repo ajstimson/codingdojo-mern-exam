@@ -24,10 +24,7 @@ module.exports = (io) => ({
 	},
 	updatePet: async (req, res) => {
 		try {
-			const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
-				runValidators: true,
-				new: true,
-			})
+			const pet = await Pet.findByIdAndUpdate(req.params.id, req.body)
 			const pets = await Pet.find()
 			io.sockets.emit({ event: "updated", pets: pets })
 			res.json(pets)
@@ -35,13 +32,6 @@ module.exports = (io) => ({
 			console.log(err)
 			return res.status(400).send(err)
 		}
-		// Pet.findByIdAndUpdate(req.params.id, req.body, {
-		// 	runValidators: true,
-		// 	new: true,
-		// })
-		// 	.then((pet) => res.json(pet))
-		// 	.then((pet) => console.log(pet))
-		// 	.catch((err) => res.json(err))
 	},
 	deletePet: async (req, res) => {
 		try {

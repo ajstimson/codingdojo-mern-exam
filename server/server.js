@@ -11,6 +11,8 @@ const io = new Server(httpServer, {
 	cors: { origin: "*" },
 })
 
+app.io = io
+
 io.on("connection", (socket) => {
 	// ...
 })

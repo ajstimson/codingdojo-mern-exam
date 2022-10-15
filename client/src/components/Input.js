@@ -1,4 +1,4 @@
-const Input = ({ type, label, error, name, value, defaultValue, onChange }) => {
+const Input = ({ type, label, name, value, defaultValue, onChange }) => {
 	return (
 		<div className="input-container">
 			<label htmlFor={name}>{label}</label>
@@ -8,9 +8,8 @@ const Input = ({ type, label, error, name, value, defaultValue, onChange }) => {
 				defaultValue={defaultValue}
 				value={value}
 				onChange={onChange}
-				className={"form-control" + (error ? " danger" : "")}
 			/>
-			{error && <p className="text-danger">{error}</p>}
+			{/* {error && <p className="text-danger">{error}</p>} */}
 		</div>
 	)
 }

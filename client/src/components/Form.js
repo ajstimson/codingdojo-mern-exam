@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom"
 
 const Form = () => {
 	const { id, pets } = useContext(PetContext)
-	const [petNames, setPetNames] = useState([])
-	const [errors, setErrors] = useState({ name: "", type: "", description: "" })
+	// const [petNames, setPetNames] = useState([])
+	// const [errors, setErrors] = useState({ name: "", type: "", description: "" })
 
 	const [value, setValue] = useState({
 		name: "",
@@ -28,38 +28,38 @@ const Form = () => {
 			axios.get(`http://localhost:8000/api/pets/${id}`).then((res) => {
 				setValue(res.data[0])
 			})
-		pets.forEach((pet) => {
-			!petNames.includes(pet.name) &&
-				setPetNames((petNames) => [...petNames, pet.name])
-		})
-	}, [pets, petNames, id, errors])
+		// pets.forEach((pet) => {
+		// 	!petNames.includes(pet.name) &&
+		// 		setPetNames((petNames) => [...petNames, pet.name])
+		// })
+	}, [pets, id])
 
 	let navigate = useNavigate()
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		console.log(value)
 
 		if (!id) {
-			if (petNames.includes(value.name)) {
-				setErrors({ ...errors, name: "Name must be unique!" })
-				return
-			} else {
-				axios
-					.post("http://localhost:8000/api/pets/new", value)
-					.then((res) => {
-						console.log(res)
-						navigate("/")
-					})
-					.catch((err) => {
-						Object.entries(err.response.data.errors).map((error) => {
-							setErrors((errors) => ({
-								...errors,
-								[error[0]]: error[1].message,
-							}))
-							return 0
-						})
-					})
-			}
+			// if (petNames.includes(value.name)) {
+			// 	setErrors({ ...errors, name: "Name must be unique!" })
+			// 	return
+			// } else {
+			axios
+				.post("http://localhost:8000/api/pets/new", value)
+				.then((res) => {
+					console.log(res)
+					navigate("/")
+				})
+				.catch((err) => {
+					// Object.entries(err.response.data.errors).map((error) => {
+					// 	setErrors((errors) => ({
+					// 		...errors,
+					// 		[error[0]]: error[1].message,
+					// 	}))
+					// 	return 0
+					// })
+					console.log(err)
+				})
+			//}
 		} else {
 			axios
 				.put(`http://localhost:8000/api/pets/update/${id}`, value)
@@ -89,7 +89,7 @@ const Form = () => {
 		}),
 		placeholder: (provided, state) => ({
 			...provided,
-			color: errors.type ? "red" : "#000c16",
+			color: "#000c16",
 		}),
 		dropdownIndicator: (provided, state) => ({
 			...provided,
@@ -118,7 +118,7 @@ const Form = () => {
 				<Input
 					type="text"
 					label="Pet's Name"
-					error={errors.name}
+					//error={errors.name}
 					name="name"
 					value={value.name}
 					onChange={(e) => setValue({ ...value, name: e.target.value })}
@@ -128,21 +128,18 @@ const Form = () => {
 					options={selectOptions}
 					onChange={(e) => setValue({ ...value, type: e.value })}
 					styles={customStyles}
-					placeholder={errors.type ? errors.type + "!" : "select..."}
+					placeholder="select..."
 					value={selectOptions.find((option) => option.value === value.type)}
 				/>
 				<Input
 					type="text"
 					label="Pet's Description"
-					error={errors.description}
+					//error={errors.description}
 					name="description"
 					value={value.description}
 					onChange={(e) => setValue({ ...value, description: e.target.value })}
 				/>
-				<button
-					type="submit"
-					disabled={errors.type || errors.description ? true : false}
-				>
+				<button type="submit">
 					{id ? (
 						<FontAwesomeIcon
 							icon={faPencil}
