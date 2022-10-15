@@ -1,42 +1,41 @@
-import { useContext } from "react"
-import Pet from "./Pet"
+import React, { useContext } from "react"
 import { PetContext } from "../context/PetContext"
+import Pet from "./Pet"
+import PetsTable from "./PetTable"
 
 const PetList = () => {
-	const { pets, setPets } = useContext(PetContext)
-
+	const { id, pets } = useContext(PetContext)
 	const PetsByType = () => {
+		if (id) return
 		const types = [...new Set(pets.map((item) => item.type))]
 		return types.map((type, i) => {
 			return (
-				<div key={i}>
-					<h2>{type}</h2>
+				<React.Fragment key={i}>
 					{pets
 						.filter((pet) => pet.type === type)
 						.map((pet) => (
-							<Pet
-								key={pet._id}
-								pets={pets}
-								setPets={setPets}
-								pet={pet}
-							/>
+							<tr key={pet._id}>
+								<Pet
+									type={type}
+									pet={pet}
+								/>
+							</tr>
 						))}
-				</div>
+				</React.Fragment>
 			)
 		})
 	}
-
 	return (
-		<div>
+		<div className={id ? "single" : "all"}>
 			{pets ? (
-				pets.length ? (
-					<PetsByType />
+				!id ? (
+					<PetsTable>
+						<PetsByType />
+					</PetsTable>
 				) : (
-					<Pet
-						pets={pets}
-						setPets={setPets}
-						pet={pets}
-					/>
+					<ul>
+						<Pet pet={pets} />
+					</ul>
 				)
 			) : (
 				<h2>No pets found...</h2>

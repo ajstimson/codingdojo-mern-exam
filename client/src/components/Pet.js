@@ -1,96 +1,45 @@
-import { useState } from "react"
-import { useParams, useNavigate, Link } from "react-router-dom"
-import axios from "axios"
-import { confirmAlert } from "react-confirm-alert"
-import "react-confirm-alert/src/react-confirm-alert.css"
+import { useContext } from "react"
+import { PetContext } from "../context/PetContext"
+import Options from "./Options"
 
-const Pet = ({ pets, setPets, pet }) => {
-	const [like, setLike] = useState(false)
-	let { id } = useParams()
+const Pet = ({ type, pet }) => {
+	const { id } = useContext(PetContext)
 
-	const handleLike = () => {
-		setLike(!like)
-	}
-	const handleAdopt = (e) => {
-		e.preventDefault()
-		confirmAlert({
-			title: "Confirm adoption",
-			message: "Are you sure you want to do this?",
-			buttons: [
-				{
-					label: "Yes",
-					onClick: () => deleteItem(),
-				},
-				{
-					label: "No",
-				},
-			],
-		})
-	}
-
-	let navigate = useNavigate()
-
-	const handleEdit = (e) => {
-		e.preventDefault()
-		navigate(`/edit/${pet._id}`)
-	}
-
-	const handleDelete = (e) => {
-		e.preventDefault()
-		confirmAlert({
-			title: "Confirm to Delete",
-			message: "Are you sure you want to do this?",
-			buttons: [
-				{
-					label: "Yes",
-					onClick: () => deleteItem(),
-				},
-				{
-					label: "No",
-				},
-			],
-		})
-	}
-
-	const deleteItem = () => {
-		axios
-			.delete(`http://localhost:8000/api/pets/delete/${pet._id}`)
-			.then((res) => {
-				setPets(pets.filter((p) => p._id !== pet._id))
-				navigate("/")
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}
 	return (
 		<>
-			<h3>{pet.name}</h3>
-			{id ? (
+			{!id ? (
 				<>
-					<p>Type: {pet.type}</p>
-					<p>Description: {pet.description}</p>
-					<p>
-						Skills: {pet.skill1}, {pet.skill2}, {pet.skill3}
-					</p>
+					<td>{pet.name}</td>
+					<td>{type}</td>
+					<td>
+						<Options pet={pet} />
+					</td>
 				</>
 			) : (
-				<Link to={`/pet/${pet._id}`}>Details...</Link>
+				<>
+					{pet[0] ? (
+						<>
+							<li>
+								<span>Pet type:</span> <span>{pet[0].type}</span>
+							</li>
+							<li>
+								<span>Description:</span> <span>{pet[0].description}</span>
+							</li>
+							<li>
+								<span>Skills:</span>{" "}
+								<span>
+									{pet[0].skill1} {pet[0].skill2} {pet[0].skill3}
+								</span>
+							</li>
+							<li>
+								<Options />
+							</li>
+						</>
+					) : (
+						<li>Loading...</li>
+					)}
+				</>
 			)}
-
-			<div className="like">
-				<button
-					onClick={(e) => handleLike()}
-					disabled={!like ? true : false}
-				>
-					Like
-				</button>
-			</div>
-			<div className="options">
-				<button onClick={(e) => handleAdopt(e)}>Adopt {pet.name}</button>
-				<button onClick={(e) => handleEdit(e)}>Edit Pet</button>
-				<button onClick={(e) => handleDelete(e)}>Remove Pet</button>
-			</div>
 		</>
 	)
 }

@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { PetContext } from "../context/PetContext"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPencil, faUpload } from "@fortawesome/free-solid-svg-icons"
 import Input from "./Input"
 import Select from "react-select"
 import axios from "axios"
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Form = () => {
+	const { id, pets } = useContext(PetContext)
 	const [petNames, setPetNames] = useState([])
 	const [errors, setErrors] = useState({ name: "", type: "", description: "" })
 
@@ -16,39 +20,46 @@ const Form = () => {
 		skill1: "",
 		skill2: "",
 		skill3: "",
+		likes: 0,
 	})
-
-	const { id } = useParams()
 
 	useEffect(() => {
 		id &&
 			axios.get(`http://localhost:8000/api/pets/${id}`).then((res) => {
 				setValue(res.data[0])
 			})
-		axios.get("http://localhost:8000/api/pets").then((res) => {
-			res.data.forEach((pet) => {
+		pets.forEach((pet) => {
+			!petNames.includes(pet.name) &&
 				setPetNames((petNames) => [...petNames, pet.name])
-			})
 		})
-	}, [id, errors])
+	}, [pets, petNames, id, errors])
 
 	let navigate = useNavigate()
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		console.log(value)
 
 		if (!id) {
-			axios
-				.post("http://localhost:8000/api/pets/new", value)
-				.then((res) => {
-					console.log(res)
-					navigate("/")
-				})
-				.catch((err) => {
-					Object.entries(err.response.data.errors).map((error) => {
-						setErrors((errors) => ({ ...errors, [error[0]]: error[1].message }))
-						return 0
+			if (petNames.includes(value.name)) {
+				setErrors({ ...errors, name: "Name must be unique!" })
+				return
+			} else {
+				axios
+					.post("http://localhost:8000/api/pets/new", value)
+					.then((res) => {
+						console.log(res)
+						navigate("/")
 					})
-				})
+					.catch((err) => {
+						Object.entries(err.response.data.errors).map((error) => {
+							setErrors((errors) => ({
+								...errors,
+								[error[0]]: error[1].message,
+							}))
+							return 0
+						})
+					})
+			}
 		} else {
 			axios
 				.put(`http://localhost:8000/api/pets/update/${id}`, value)
@@ -62,16 +73,31 @@ const Form = () => {
 	}
 
 	const customStyles = {
+		control: (provided, state) => ({
+			...provided,
+			backgroundColor: "plum",
+			color: "#000c16",
+			marginBottom: "2.5rem",
+		}),
 		option: (provided, state) => ({
 			...provided,
 			borderBottom: "1px dotted plum",
-			color: state.isSelected ? "#64c3a3" : "plum",
+			backgroundColor: state.isFocused ? "plum" : "#64c3a3",
+			color: "#000c16",
 			fontWeight: state.isSelected ? "bold" : "normal",
 			padding: 20,
 		}),
 		placeholder: (provided, state) => ({
 			...provided,
-			color: errors.type ? "red" : "plum",
+			color: errors.type ? "red" : "#000c16",
+		}),
+		dropdownIndicator: (provided, state) => ({
+			...provided,
+			color: "#000c16",
+		}),
+		indicatorSeparator: (provided, state) => ({
+			...provided,
+			backgroundColor: "#000c16",
 		}),
 	}
 
@@ -85,74 +111,76 @@ const Form = () => {
 		{ value: "other", label: "Other" },
 	]
 
-	const handleChange = (e) => {
-		console.log(e)
-		setValue({ ...value, [e.target.name]: e.target.value })
-
-		if (e.target.name === "name") {
-			!id && petNames.indexOf(e.target.value) === 0
-				? setErrors({ ...errors, name: "Name must be unique!" })
-				: setErrors({ ...errors, name: "" })
-		} else if (e.target.name === "description") {
-			e.target.value.length > 0 && setErrors({ ...errors, description: "" })
-		}
-	}
 	if (id && !value.name) return null
 	return (
 		<form onSubmit={(e) => handleSubmit(e)}>
-			<Input
-				type="text"
-				label="Pet's Name"
-				error={errors.name}
-				name="name"
-				defaultValue={value.name}
-				onChange={(e) => handleChange(e)}
-			/>
-			<label>Type:</label>
-			<Select
-				options={selectOptions}
-				onChange={(e) => setValue({ ...value, type: e.value })}
-				styles={customStyles}
-				placeholder={errors.type ? errors.type + "!" : "select..."}
-				value={selectOptions.find((option) => option.value === value.type)}
-			/>
-			<Input
-				type="text"
-				label="Pet's Description"
-				// error={errors.description}
-				name="description"
-				defaultValue={value.description}
-				onChange={(e) => handleChange(e)}
-			/>
-			<Input
-				type="text"
-				label="Pet's Skill 1"
-				name="petSkill1"
-				value={value.skill1}
-				onChange={(e) => setValue({ ...value, skill1: e.target.value })}
-			/>
-			<Input
-				type="text"
-				label="Pet's Skill 2"
-				name="petSkill2"
-				value={value.skill2}
-				onChange={(e) => setValue({ ...value, skill2: e.target.value })}
-			/>
-			<Input
-				type="text"
-				label="Pet's Skill 3"
-				name="petSkill3"
-				value={value.skill3}
-				onChange={(e) => setValue({ ...value, skill3: e.target.value })}
-			/>
-			<button
-				type="submit"
-				disabled={
-					errors.name || errors.type || errors.description ? true : false
-				}
-			>
-				Submit
-			</button>
+			<div className="row-content">
+				<Input
+					type="text"
+					label="Pet's Name"
+					error={errors.name}
+					name="name"
+					value={value.name}
+					onChange={(e) => setValue({ ...value, name: e.target.value })}
+				/>
+				<label>Type:</label>
+				<Select
+					options={selectOptions}
+					onChange={(e) => setValue({ ...value, type: e.value })}
+					styles={customStyles}
+					placeholder={errors.type ? errors.type + "!" : "select..."}
+					value={selectOptions.find((option) => option.value === value.type)}
+				/>
+				<Input
+					type="text"
+					label="Pet's Description"
+					error={errors.description}
+					name="description"
+					value={value.description}
+					onChange={(e) => setValue({ ...value, description: e.target.value })}
+				/>
+				<button
+					type="submit"
+					disabled={errors.type || errors.description ? true : false}
+				>
+					{id ? (
+						<FontAwesomeIcon
+							icon={faPencil}
+							style={{ color: "#001629" }}
+						/>
+					) : (
+						<FontAwesomeIcon
+							icon={faUpload}
+							style={{ color: "#001629" }}
+						/>
+					)}{" "}
+					{id ? "Edit Pet" : "Add Pet"}
+				</button>
+			</div>
+			<div className="row-content">
+				<h3>Skills (optional):</h3>
+				<Input
+					type="text"
+					label="Pet's Skill 1"
+					name="petSkill1"
+					value={value.skill1}
+					onChange={(e) => setValue({ ...value, skill1: e.target.value })}
+				/>
+				<Input
+					type="text"
+					label="Pet's Skill 2"
+					name="petSkill2"
+					value={value.skill2}
+					onChange={(e) => setValue({ ...value, skill2: e.target.value })}
+				/>
+				<Input
+					type="text"
+					label="Pet's Skill 3"
+					name="petSkill3"
+					value={value.skill3}
+					onChange={(e) => setValue({ ...value, skill3: e.target.value })}
+				/>
+			</div>
 		</form>
 	)
 }

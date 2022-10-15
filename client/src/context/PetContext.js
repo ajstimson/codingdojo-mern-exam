@@ -28,15 +28,26 @@ const Context = ({ children }) => {
 	const { current: socket } = useRef(io(ENDPOINT))
 	useEffect(() => {
 		socket.onAny((res) => {
-			console.log("test", res)
 			if (res.event === "deleted") {
 				setPets((pets) => pets.filter((pet) => pet._id !== res.id))
 			}
+			if (res.event === "updated") {
+				setPets(res.pets)
+			}
+			if (res.event === "added") {
+				setPets(res.pets)
+			}
 		})
 	}, [socket, setPets])
+
+	// useEffect(() => {
+	// 	console.log(id)
+	// 	id && pets && setLikes(pets[0].likes)
+	// }, [id, pets, likes, setLikes])
 	return (
 		<PetContext.Provider
 			value={{
+				id: id,
 				pets: id ? pets.filter((pet) => id === pet._id) : pets,
 				setPets,
 			}}

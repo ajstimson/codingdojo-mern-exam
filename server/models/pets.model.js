@@ -21,6 +21,7 @@ const PetSchema = new mongoose.Schema(
 		skill1: String,
 		skill2: String,
 		skill3: String,
+		likes: Number,
 	},
 	{ timestamps: true }
 )

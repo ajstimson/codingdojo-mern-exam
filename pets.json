@@ -2,46 +2,51 @@
     {
         "name": "Fido",
         "type": "dog",
-        "description": "Mixed Breed, Young, Male, Large Yellow / Tan / Blond / Black",
+        "description": "Mutt, large, 2 years old",
         "available": true,
         "skill1": "roll over",
         "skill2": "play dead",
-        "skill3": "fetch"
+        "skill3": "fetch",
+        "likes": 42
     },
     {
         "name": "Spot",
         "type": "dog",
-        "description": "Terrier, Old, Male, Small Black / White",
+        "description": "Terrier, small, 3 years old",
         "available": false,
         "skill1": "bark",
         "skill2": "dig",
-        "skill3": "chew shoes"
+        "skill3": "chew shoes",
+        "likes": 13
     },
     {
         "name": "Fluffy",
         "type": "cat",
-        "description": "Manx, Young, Female, Large Orange / White",
+        "description": "Manx, medium, 1 year old",
         "available": false,
         "skill1": "meow",
         "skill2": "purr",
-        "skill3": "sleep"
+        "skill3": "sleep",
+        "likes": 23
     },
     {
         "name": "Patches",
         "type": "cat",
-        "description": "Calico, Young, Male, Medium Orange / White / Black",
+        "description": "Calico, medium, 7 years old",
         "available": true,
         "skill1": "runs",
         "skill2": "hides under bed",
-        "skill3": "unknown"
+        "skill3": "unknown",
+        "likes": 0
     },
     {
         "name": "Medusa",
         "type": "snake",
-        "description": "Ball Python, Ancient, Female, Medium Yellow / Brown / Black",
+        "description": "Ball Python, deadly, 1000 years old",
         "available": true,
         "skill1": "hisses",
         "skill2": "eats mice",
-        "skill3": "sleeps"
+        "skill3": "sleeps",
+        "likes": 666
     }
 ]

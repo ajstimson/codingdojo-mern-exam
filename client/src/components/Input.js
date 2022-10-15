@@ -1,6 +1,6 @@
 const Input = ({ type, label, error, name, value, defaultValue, onChange }) => {
 	return (
-		<div>
+		<div className="input-container">
 			<label htmlFor={name}>{label}</label>
 			<input
 				type={type}
