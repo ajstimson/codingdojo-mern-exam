@@ -13,7 +13,7 @@ const io = new Server(httpServer, {
 
 app.io = io
 
-io.on("connection", (socket) => {
+app.io.on("connection", (socket) => {
 	console.log(`${socket.id} is connected`)
 })
 
