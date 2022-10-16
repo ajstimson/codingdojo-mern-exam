@@ -24,8 +24,7 @@ const Context = ({ children }) => {
 			})
 	}, [id, setPets])
 
-	const ENDPOINT = "http://localhost:8000/api"
-	//const ENDPOINT = "http://18.236.218.12:8000"
+	const ENDPOINT = "http://localhost:8000/"
 	const { current: socket } = useRef(io(ENDPOINT))
 	useEffect(() => {
 		socket.onAny((res) => {
