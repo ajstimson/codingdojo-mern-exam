@@ -14,7 +14,7 @@ const io = new Server(httpServer, {
 app.io = io
 
 app.io.on("connection", (socket) => {
-	console.log(`${socket.id} is connected`)
+	// console.log(`${socket.id} is connected`)
 })
 
 //middleware

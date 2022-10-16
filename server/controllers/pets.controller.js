@@ -5,7 +5,7 @@ module.exports = (io) => ({
 		try {
 			const pet = await Pet.create(req.body)
 			const pets = await Pet.find()
-			io.sockets.emit({ event: "added", pets: pets })
+			io.of("/api").sockets.emit({ event: "added", pets: pets })
 			res.json(pets)
 		} catch (err) {
 			console.log(err)
@@ -24,9 +24,10 @@ module.exports = (io) => ({
 	},
 	updatePet: async (req, res) => {
 		try {
+			console.log(io)
 			const pet = await Pet.findByIdAndUpdate(req.params.id, req.body)
 			const pets = await Pet.find()
-			io.sockets.emit({ event: "updated", pets: pets })
+			io.of("/api").emit({ event: "updated", pets: pets })
 			res.json(pets)
 		} catch (err) {
 			console.log(err)
