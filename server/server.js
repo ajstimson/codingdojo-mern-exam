@@ -22,7 +22,7 @@ app.use(
 	express.json(),
 	express.urlencoded({ extended: true }),
 	cors({
-		origin: "http://18.236.218.12",
+		origin: "http://localhost:3000",
 	})
 )
 
